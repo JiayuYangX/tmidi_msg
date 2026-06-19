@@ -1,0 +1,13 @@
+﻿TMIDI Messages - SSP 插件
+
+通过 DDE 检测 TMIDI Player 的 MIDI 播放，并向桌面角色
+发送 Sakura Script 播报曲目名称。
+
+用法：安装后在 SSP 中加载即可。当 TMIDI Player 播放
+MIDI 文件时，角色会说出曲名。
+
+可在 sstp_sample.txt 中自定义消息模板。
+
+运行环境：TMIDI Player、已加载角色的 SSP。
+
+编译：cl /LD /O2 /MD /Fe:tmidi_msg.dll tmidi_msg.c user32.lib

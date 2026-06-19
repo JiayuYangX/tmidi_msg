@@ -1,0 +1,38 @@
+#
+# TMIDI用SSTP消息示例文件
+# 目前(ver.3.8.x)仅为试验性实现。
+# 
+# #Header 头部定义
+# 
+# #Message SSTP消息
+#
+# 根据WRD类型切换消息时，使用以下命令。
+#
+# #MIMPIWRD MIMPIWRD演奏时的消息
+# #SherryWRD SherryWRD演奏时的消息
+# #NeoWRD NeoWRD演奏时的消息
+# #NoWRD 无WRD演奏时的消息
+#
+# 消息中可使用以下变量
+# 
+# $title MIDI文件的标题
+# $format MIDI文件的格式类型
+# $target 仿真的目标音源
+# $module 仿真的使用音源
+#
+
+#Header
+SEND SSTP/1.0
+Sender: TMIDI Player
+
+#MIMPIWRD
+Script: \h\s[0]好像开始演奏了耶。\n  曲名叫$title。\n\u\w8哦哦，在用WRD呢，好厉害。\n\h\s[2]\n\w8跟%me一样厉害呢。\n\u\n\w8喂喂。\n\e
+
+#SherryWRD
+Script: \h\s[0]好像开始演奏了耶。\n  曲名叫$title。\n\u\w8哦哦，在用SherryWRD呢，好厉害。\n\h\s[2]\n\w8跟%me一样厉害呢。\n\u\n\w8喂喂。\n\e
+
+#NeoWRD
+Script: \h\s[0]好像开始演奏了耶。\n  曲名叫$title。\n\u\w8这就用上Neo WRD了，好厉害。\n\h\s[2]\n\w8跟%me一样厉害呢。\n\u\n\w8喂喂。\n\e
+
+#NoWRD
+Script: \h\s[0]好像开始演奏了耶。\n  曲名叫$title。\n\u\w8好像是$format格式的。\n\n\w8是什么曲子呢？\n\h\n\w8嗯，像是%me这样的曲子吧。\n\u\n\w8真的吗？\n\e
