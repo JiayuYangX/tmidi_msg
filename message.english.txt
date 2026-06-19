@@ -1,10 +1,11 @@
 ﻿TMIDI Messages - SSP Plugin
 
-Detects MIDI playback from TMIDI Player via DDE and sends song
-titles to ghost characters through Sakura Script.
+Detects playback from TMIDI Player via DDE and sends track
+information to ghost characters through Sakura Script.
 
-Usage: Just install and load in SSP. When TMIDI Player plays a
-MIDI file, the ghost will speak the song title.
+Usage: Install and use.
+When TMIDI Player starts playback, the ghost will announce
+the track.
 
 You can customize the message template in sstp_sample.txt.
 

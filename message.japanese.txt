@@ -1,13 +1,13 @@
 ﻿TMIDI Messages - SSP用プラグイン
 
-TMIDI Playerの演奏をDDEで検出し、ゴーストキャラクターに
-Sakura Scriptで曲名を表示します。
+TMIDI Playerの再生をDDEで検出し、ゴーストキャラクターに
+Sakura Scriptで曲目情報を表示します。
 
-使い方: SSPにインストールして起動するだけ。TMIDI Playerで
-MIDIファイルを再生すると、ゴーストが曲名をしゃべります。
+使い方: インストールするだけでご利用いただけます。
+TMIDI Playerで再生が始まると、ゴーストが曲目情報をしゃべります。
 
 sstp_sample.txtでメッセージをカスタマイズできます。
 
 必要環境: TMIDI Player、ゴーストを読み込んだSSP。
 
-コンパイル: cl /LD /O2 /MD /Fe:tmidi_msg.dll tmidi_msg.c user32.lib
+コンパイル: x86ツールチェーンを使用（vcvars32.bat）。cl /LD /O2 /MT /Fe:tmidi_msg.dll tmidi_msg.cpp user32.lib shell32.lib

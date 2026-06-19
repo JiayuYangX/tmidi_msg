@@ -11,14 +11,12 @@
 # #MIMPIWRD MIMPIWRD演奏时的消息
 # #SherryWRD SherryWRD演奏时的消息
 # #NeoWRD NeoWRD演奏时的消息
-# #NoWRD 无WRD演奏时的消息
+# #NoWRD 无WRD演奏时的消息  
 #
 # 消息中可使用以下变量
 # 
 # $title MIDI文件的标题
 # $format MIDI文件的格式类型
-# $target 仿真的目标音源
-# $module 仿真的使用音源
 #
 
 #Header
