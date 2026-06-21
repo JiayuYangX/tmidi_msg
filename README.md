@@ -55,24 +55,28 @@ SSP/
 
 ## 模板配置
 
-编辑 `sstp_sample.txt` 自定义播报内容。格式与 TMIDI Player 原生 `sstp_sample.txt` 类似，可直接沿用原有配置（**注意：`$target` 和 `$module` 不被支持**）。在 `#MIMPIWRD` 段落下添加 `Script:` 行：
+编辑 `sstp_sample.txt` 自定义播报内容。格式与 TMIDI Player 原生 `sstp_sample.txt` 类似，可直接沿用原有配置（**注意：`$target` 和 `$module` 不被支持**）。
 
-```
-#MIMPIWRD
-Script:\0\s[0]正在播放：$title\e
-```
+`sstp_sample.txt` 支持检测 WRD 类型，插件根据播放文件自动选择：
+
+| 节区         | 触发条件                        |
+|--------------|---------------------------------|
+| `#MIMPIWRD`  | 存在同名的 `.wrd` 或 `.dv` 文件 |
+| `#SherryWRD` | 存在同名的 `.sry` 文件          |
+| `#NeoWRD`    | 播放文件自身扩展名为 `.neo`     |
+| `#NoWRD`     | 未检测到以上任何 WRD（默认）    |
 
 ### 模板变量
 
-| 变量      | 替换值      |
-|-----------|-------------|
-| `$title`  | 曲目标题    |
-| `$format` | 格式        |
+| 变量      | 替换值     |
+|-----------|------------|
+| `$title`  | 曲目标题   |
+| `$format` | 文件格式   |
 
 ## 工作原理
 
 ```
-TMIDI Player ──DDE──▶ tmidi_msg.dll ──PLUGIN/2.0──▶ SSP ──Sakura Script──▶ 角色
+TMIDI Player ──DDE──▶ tmidi_msg.dll ──PLUGIN/2.0──▶ SSP ──Sakura Script──▶ Ghost
 ```
 
 - 使用 **DDEML**（`APPCLASS_STANDARD`）建立持久会话

@@ -74,11 +74,24 @@ extern "C" HDDEDATA CALLBACK dde_cb(UINT t, UINT f, HCONV c, HSZ h1, HSZ h2, HDD
     return (HDDEDATA)NULL;
 }
 
-static void tmpl(const string &dir) {
+static void check_tmpl(void) {
+    string p = g_dir + "\\sstp_sample.txt";
+    WIN32_FILE_ATTRIBUTE_DATA fa;
+    if (GetFileAttributesExA(p.c_str(), GetFileExInfoStandard, &fa)) {
+        if (CompareFileTime(&fa.ftLastWriteTime, &g_tmpl_mtime) == 0)
+            return;
+        g_tmpl_mtime = fa.ftLastWriteTime;
+    } else {
+        if (g_tmpl_x[0]) return;
+        memset(&g_tmpl_mtime, 0, sizeof(g_tmpl_mtime));
+        g_tmpl_m[0] = g_tmpl_s[0] = g_tmpl_n[0] = 0;
+        strcpy_s(g_tmpl_x, 8192, "\\0\\s[0]$title\\n\\e");
+        g_tmpl = g_tmpl_x;
+        return;
+    }
     char *dst[4] = {g_tmpl_m, g_tmpl_s, g_tmpl_n, g_tmpl_x};
-    const char *tag[4] = {"MIMPIWRD", "SherryWRD", "NeoWRD", "NoWRD"};
+    string tag[4] = {"MIMPIWRD", "SherryWRD", "NeoWRD", "NoWRD"};
     g_tmpl_m[0] = g_tmpl_s[0] = g_tmpl_n[0] = g_tmpl_x[0] = 0;
-    string p = dir + "\\sstp_sample.txt";
     HANDLE f = CreateFileA(p.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (f == INVALID_HANDLE_VALUE) { strcpy_s(g_tmpl_x, 8192, "\\0\\s[0]$title\\n\\e"); g_tmpl = g_tmpl_x; return; }
     DWORD sz = GetFileSize(f, NULL); if (sz > 65536) sz = 65536;
@@ -107,35 +120,21 @@ static void tmpl(const string &dir) {
     }
     if (!g_tmpl_x[0]) strcpy_s(g_tmpl_x, 8192, "\\0\\s[0]$title\\n\\e");
     g_tmpl = g_tmpl_x[0] ? g_tmpl_x : (g_tmpl_m[0] ? g_tmpl_m : g_tmpl_x);
-    WIN32_FILE_ATTRIBUTE_DATA fa;
-    if (GetFileAttributesExA(p.c_str(), GetFileExInfoStandard, &fa))
-        g_tmpl_mtime = fa.ftLastWriteTime;
-    else
-        memset(&g_tmpl_mtime, 0, sizeof(g_tmpl_mtime));
-}
-
-static void check_tmpl(void) {
-    string p = g_dir + "\\sstp_sample.txt";
-    WIN32_FILE_ATTRIBUTE_DATA fa;
-    if (GetFileAttributesExA(p.c_str(), GetFileExInfoStandard, &fa)) {
-        if (CompareFileTime(&fa.ftLastWriteTime, &g_tmpl_mtime) != 0)
-            tmpl(g_dir);
-    }
 }
 
 static void select_tmpl(const string &path) {
     string base = path;
     size_t dot = base.rfind('.');
     if (dot == string::npos) { g_tmpl = g_tmpl_x[0] ? g_tmpl_x : g_tmpl_m; return; }
+    string ext = base.substr(dot + 1);
+    for (auto &ch : ext) ch = (char)tolower((unsigned char)ch);
+    if (ext == "neo" && g_tmpl_n[0]) { g_tmpl = g_tmpl_n; return; }
     base.resize(dot);
-    string test = base + ".nrd";
-    if (GetFileAttributesA(test.c_str()) != INVALID_FILE_ATTRIBUTES && g_tmpl_n[0])
-        { g_tmpl = g_tmpl_n; return; }
-    test = base + ".sry";
-    if (GetFileAttributesA(test.c_str()) != INVALID_FILE_ATTRIBUTES && g_tmpl_s[0])
+    if (GetFileAttributesA((base + ".sry").c_str()) != INVALID_FILE_ATTRIBUTES && g_tmpl_s[0])
         { g_tmpl = g_tmpl_s; return; }
-    test = base + ".wrd";
-    if (GetFileAttributesA(test.c_str()) != INVALID_FILE_ATTRIBUTES && g_tmpl_m[0])
+    if (GetFileAttributesA((base + ".wrd").c_str()) != INVALID_FILE_ATTRIBUTES && g_tmpl_m[0])
+        { g_tmpl = g_tmpl_m; return; }
+    if (GetFileAttributesA((base + ".dv").c_str()) != INVALID_FILE_ATTRIBUTES && g_tmpl_m[0])
         { g_tmpl = g_tmpl_m; return; }
     g_tmpl = g_tmpl_x[0] ? g_tmpl_x : g_tmpl_m;
 }
@@ -147,23 +146,6 @@ static string acp2utf8(const string &in) {
     char out[256] = {0};
     WideCharToMultiByte(CP_UTF8, 0, w, -1, out, 256, NULL, NULL);
     return out;
-}
-
-static string fmt_ext(HCONV c, const string &pf) {
-    string fn = dde_query(c, "getfilename " + pf);
-    if (fn.empty()) return "MIDI";
-    size_t dot = fn.rfind('.');
-    if (dot == string::npos) return "MIDI";
-    string ext = fn.substr(dot + 1);
-    for (auto &ch : ext) ch = (char)toupper((unsigned char)ch);
-    if (ext == "MID" || ext == "SMF") return "SMF";
-    if (ext == "RCP") return "RCP";
-    if (ext == "R36") return "R36";
-    if (ext == "G36") return "G36";
-    if (ext == "G18") return "G18";
-    if (ext == "WAV") return "WAV";
-    if (ext == "MP3") return "MP3";
-    return ext;
 }
 
 static string build_script(const string &title, const string &format) {
@@ -206,7 +188,12 @@ static void poll(void) {
             if (fn != inst.last) {
                 string ra = dde_query(inst.conv, "gettitle " + tr);
                 string ti = acp2utf8(ra);
-                string fmt = fmt_ext(inst.conv, tr);
+                string fmt = "MIDI";
+                size_t dt = fn.rfind('.');
+                if (dt != string::npos) {
+                    fmt = fn.substr(dt + 1);
+                    for (auto &ch : fmt) ch = (char)toupper((unsigned char)ch);
+                }
                 g_script = build_script(ti, fmt);
                 inst.last = fn;
                 break;
@@ -230,7 +217,6 @@ extern "C" __declspec(dllexport) BOOL __cdecl load(HGLOBAL h, long len) {
         while (!g_dir.empty() && g_dir.back() == '\\') g_dir.pop_back();
     }
     if (h) GlobalFree(h);
-    tmpl(g_dir);
     if (DdeInitializeW(&g_dde, dde_cb, APPCLASS_STANDARD, 0L) != DMLERR_NO_ERROR) return TRUE;
     {
         HSZ svc = DdeCreateStringHandleW(g_dde, L"TMIDI", CP_WINUNICODE);

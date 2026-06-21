@@ -53,17 +53,21 @@ SSP/
 
 Edit `sstp_sample.txt` to customize the message. The format is similar to TMIDI Player's original `sstp_sample.txt` (**note: `$target` and `$module` are not supported**).
 
-```
-#MIMPIWRD
-Script:\0\s[0]Now playing: $title\e
-```
+The template supports WRD type detection, auto-selected based on the playing file:
+
+| Section      | Trigger                               |
+|--------------|---------------------------------------|
+| `#MIMPIWRD`  | Companion `.wrd` or `.dv` file exists |
+| `#SherryWRD` | Companion `.sry` file exists          |
+| `#NeoWRD`    | Playing file has `.neo` extension     |
+| `#NoWRD`     | No WRD detected (fallback)            |
 
 ### Template variables
 
-| Variable  | Replaced with   |
-|-----------|-----------------|
-| `$title`  | Song title      |
-| `$format` | Format          |
+| Variable  | Replaced with |
+|-----------|---------------|
+| `$title`  | Song title    |
+| `$format` | File Format   |
 
 ## How It Works
 
