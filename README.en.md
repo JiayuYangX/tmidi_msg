@@ -80,6 +80,8 @@ TMIDI Player ──DDE──▶ tmidi_msg.dll ──PLUGIN/2.0──▶ SSP ─�
 - On status `"play"` with changed filename, fetches title via `gettitle` and injects script
 - DDE strings handled in `CP_WINUNICODE`, data in `CF_TEXT` via system ANSI codepage
 
+Known issue: If the same file is stopped and restarted within the plugin's timer interval (minimum 1 second), or reopened without stopping, the filename change won't be detected, so no dialogue will be triggered. (I don't suppose anyone would actually do this though.)
+
 ## Build
 
 ```bash
