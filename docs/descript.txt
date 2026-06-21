@@ -1,7 +1,7 @@
 ﻿Charset,UTF-8
 name,TMIDI Messages
+craftman,Jiayu
 filename,tmidi_msg.dll
 id,B5F4E3D2-1A6C-4B8E-9F0D-7C8A2E3B1D5F
 secondchangeinterval,1
-homeurl,about:blank
-
+homeurl,https://jiayuyangx.github.io/tmidi_msg/

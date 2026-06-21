@@ -24,9 +24,9 @@ TMIDI Player 自 **ver.3.8.1**（2001 年）起搭载了 SSTP 客户端功能，
 
 ## 运行环境
 
-- **TMIDI Player** 3.8.6（DDE 服务名：`TMIDI`）
-- **SSP**（Sakura Script Player），需加载角色
-- Windows（DDE 使用系统 ANSI 代码页；中文 Windows / GBK 环境已测试通过）
+- **TMIDI Player**（DDE 服务名：`TMIDI`）
+- **SSP**（Sakura Script Player），需加载人格
+- **Windows**（DDE 使用系统 ANSI 代码页）
 
 ## 安装方法
 

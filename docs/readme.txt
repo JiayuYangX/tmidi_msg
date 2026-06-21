@@ -25,8 +25,9 @@ TMIDI Player 演奏时，插件通过 DDE 自动检测播放状态，读取曲�
 - 注意：$target、$module、%me 等原有变量不被支持。
 
 ■必要环境
-- SSP较新版本
-- TMIDI Player
+- TMIDI Player（DDE 服务名：TMIDI）
+- SSP（Sakura Script Player），需加载人格
+- Windows（DDE 使用系统 ANSI 代码页）
 
 ■更新历史
 - 2026/06/21 1.1.0

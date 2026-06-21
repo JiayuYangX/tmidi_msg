@@ -22,9 +22,9 @@ This plugin replaces the broken TCP/SSTP pathway with a **DDE + PLUGIN/2.0** app
 
 ## Requirements
 
-- **TMIDI Player** 3.8.6 (DDE service name: `TMIDI`)
+- **TMIDI Player** (DDE service name: `TMIDI`)
 - **SSP** (Sakura Script Player) with a ghost character loaded
-- Windows (DDE runs on the system ANSI codepage; tested on Chinese Windows / GBK)
+- **Windows** (DDE runs on the system ANSI codepage)
 
 ## Installation
 
