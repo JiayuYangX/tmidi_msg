@@ -1,5 +1,6 @@
 ﻿Charset,UTF-8
 name,TMIDI Messages
+craftmanurl,https://github.com/JiayuYangX/tmidi_msg
 craftman,Jiayu
 filename,tmidi_msg.dll
 id,B5F4E3D2-1A6C-4B8E-9F0D-7C8A2E3B1D5F
